@@ -1,0 +1,9 @@
+.App-root {
+  min-height: 100vh;
+}
+
+/* We keep App.css minimal because Tailwind + tokens drive visuals */
+
+.no-js-fallback {
+  min-height: 100vh;
+}

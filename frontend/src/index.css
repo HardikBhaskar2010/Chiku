@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base surfaces */
+    --background: 210 40% 4%; /* deep blue-black */
+    --foreground: 210 40% 98%; /* soft white */
+
+    --card: 210 32% 8%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 210 40% 6%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Brand / neon hacker palette (green + cyan, no purple) */
+    --primary: 142 82% 55%; /* neon matrix green */
+    --primary-foreground: 210 40% 4%;
+
+    --secondary: 196 82% 52%; /* ocean cyan */
+    --secondary-foreground: 210 40% 6%;
+
+    --accent: 46 97% 63%; /* warm amber accent for candles/confetti */
+    --accent-foreground: 210 40% 6%;
+
+    --muted: 210 24% 16%;
+    --muted-foreground: 210 12% 72%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 210 24% 18%;
+    --input: 210 24% 16%;
+    --ring: 142 82% 55%;
+
+    /* Data viz */
+    --chart-1: 142 82% 55%;
+    --chart-2: 196 82% 52%;
+    --chart-3: 187 47% 55%;
+    --chart-4: 46 97% 63%;
+    --chart-5: 9 87% 64%;
+
+    --radius: 0.9rem;
+
+    /* Extended tokens */
+    --bg-elevated: 210 32% 10%;
+    --bg-soft: 210 30% 8%;
+    --hacker-grid: 210 24% 12%;
+
+    --primary-soft: 142 60% 40%;
+    --primary-glow: 142 82% 60%;
+    --secondary-soft: 196 60% 40%;
+
+    /* Gradients (used only for accent blocks, <20% viewport) */
+    --gradient-hero: linear-gradient(135deg, hsl(210 40% 4%), hsl(210 40% 7%));
+    --gradient-accent: linear-gradient(135deg, hsl(142 82% 55%), hsl(196 82% 52%));
+    --gradient-card: linear-gradient(145deg, hsl(210 32% 8%), hsl(210 24% 14%));
+
+    /* Shadows & glows */
+    --shadow-soft: 0 18px 45px hsl(210 40% 2% / 0.75);
+    --shadow-glow-primary: 0 0 40px hsl(142 82% 55% / 0.65);
+    --shadow-glow-secondary: 0 0 38px hsl(196 82% 52% / 0.55);
+
+    /* Motion */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-medium: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 320ms cubic-bezier(0.23, 1, 0.32, 1);
+
+    /* Component-specific tokens */
+    --btn-radius: 999px;
+    --btn-shadow: 0 14px 35px hsl(142 82% 40% / 0.55);
+    --chip-radius: 999px;
+
+    --grid-size: 24px;
+  }
+
+  .dark {
+    /* Slightly brighter foreground for dark mode */
+    --background: 210 40% 3%;
+    --foreground: 210 40% 98%;
+
+    --card: 210 32% 7%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 210 40% 4%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 142 82% 55%;
+    --primary-foreground: 210 40% 4%;
+
+    --secondary: 196 82% 52%;
+    --secondary-foreground: 210 40% 4%;
+
+    --accent: 46 97% 63%;
+    --accent-foreground: 210 40% 6%;
+
+    --muted: 210 24% 14%;
+    --muted-foreground: 210 12% 72%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 210 24% 18%;
+    --input: 210 24% 18%;
+    --ring: 142 82% 55%;
+
+    --bg-elevated: 210 32% 9%;
+    --bg-soft: 210 30% 7%;
+    --hacker-grid: 210 24% 11%;
+
+    --primary-soft: 142 60% 38%;
+    --primary-glow: 142 82% 60%;
+    --secondary-soft: 196 60% 40%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(210 40% 3%), hsl(210 40% 8%));
+    --gradient-accent: linear-gradient(135deg, hsl(142 82% 55%), hsl(196 82% 52%));
+    --gradient-card: linear-gradient(145deg, hsl(210 32% 7%), hsl(210 24% 13%));
+
+    --shadow-soft: 0 18px 45px hsl(210 40% 2% / 0.8);
+    --shadow-glow-primary: 0 0 45px hsl(142 82% 55% / 0.7);
+    --shadow-glow-secondary: 0 0 40px hsl(196 82% 52% / 0.6);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", sans-serif;
+  }
+}
+
+@layer components {
+  .bg-gradient-hero {
+    background-image: var(--gradient-hero);
+  }
+
+  .bg-gradient-accent {
+    background-image: var(--gradient-accent);
+  }
+
+  .bg-gradient-card {
+    background-image: var(--gradient-card);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-glow-primary {
+    box-shadow: var(--shadow-glow-primary);
+  }
+
+  .shadow-glow-secondary {
+    box-shadow: var(--shadow-glow-secondary);
+  }
+
+  .neon-ring {
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.7), 0 0 24px hsl(var(--primary) / 0.6);
+  }
+
+  .neon-text-primary {
+    text-shadow: 0 0 18px hsl(var(--primary) / 0.8), 0 0 32px hsl(var(--primary-glow) / 0.6);
+  }
+
+  .neon-text-secondary {
+    text-shadow: 0 0 18px hsl(var(--secondary) / 0.8), 0 0 32px hsl(var(--secondary-soft) / 0.6);
+  }
+
+  .card-elevated {
+    @apply rounded-2xl border border-border/60 bg-[hsl(var(--bg-elevated))] shadow-soft;
+  }
+
+  .chip-muted {
+    @apply inline-flex items-center gap-1 rounded-full bg-muted/60 px-3 py-1 text-xs font-medium text-muted-foreground/90;
+  }
+}
+
+@layer utilities {
+  .hacker-grid-bg {
+    background-image: linear-gradient(
+        to right,
+        hsl(var(--hacker-grid) / 0.8) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        hsl(var(--hacker-grid) / 0.8) 1px,
+        transparent 1px
+      );
+    background-size: var(--grid-size) var(--grid-size);
+  }
+
+  .noise-overlay {
+    position: relative;
+  }
+
+  .noise-overlay::after {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+}
