@@ -309,8 +309,26 @@ function App() {
   };
 
   const handleDownloadCard = async () => {
-    // Use the same custom card generation
-    await handleGenerateAndShareCard();
+    try {
+      const hero = document.querySelector("section[aria-labelledby='hero-heading']");
+      if (!hero) throw new Error("Hero not found");
+      const html2canvas = (await import("html2canvas")).default;
+      const canvas = await html2canvas(hero, {
+        backgroundColor: "#020817",
+        scale: window.devicePixelRatio || 2,
+      });
+      const link = document.createElement("a");
+      link.download = "happy-birthday-chirag.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      toast("E-card downloaded", {
+        description: "Saved a snapshot of Chirags hacker birthday view.",
+      });
+    } catch (e) {
+      toast("Download failed", {
+        description: "Couldnt capture the card. Try again or check permissions.",
+      });
+    }
   };
 
   const handleRevealEasterEgg = () => {
