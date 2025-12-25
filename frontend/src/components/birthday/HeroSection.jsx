@@ -1,8 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import anime from "animejs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { Volume2, VolumeX, PlayCircle, PauseCircle, Share2, Download } from "lucide-react";
+import { Volume2, VolumeX, PlayCircle, PauseCircle, Share2, Download, Sparkles } from "lucide-react";
+import { TextReveal, FloatingElement, PulseGlow, RippleEffect, celebrateSequence } from "./AnimeAnimations";
+import { ConfettiBurst, FireworksBurst } from "./ParticleSystem";
 
 const subtitles = [
   "To the guy who codes like a wizard",
@@ -30,6 +33,51 @@ export const HeroSection = ({
   const [isLongPress, setIsLongPress] = useState(false);
   const longPressTimeout = useRef(null);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
+  const titleRef = useRef(null);
+  const cardRef = useRef(null);
+  const hudRef = useRef(null);
+
+  // Anime.js entrance animations
+  useEffect(() => {
+    // Title animation
+    if (titleRef.current) {
+      anime({
+        targets: titleRef.current,
+        opacity: [0, 1],
+        translateY: [50, 0],
+        scale: [0.9, 1],
+        duration: 1200,
+        easing: "easeOutExpo",
+        delay: 300,
+      });
+    }
+
+    // Card entrance
+    if (cardRef.current) {
+      anime({
+        targets: cardRef.current,
+        opacity: [0, 1],
+        translateX: [-50, 0],
+        duration: 1000,
+        easing: "easeOutExpo",
+        delay: 600,
+      });
+    }
+
+    // HUD entrance
+    if (hudRef.current) {
+      anime({
+        targets: hudRef.current,
+        opacity: [0, 1],
+        translateX: [50, 0],
+        duration: 1000,
+        easing: "easeOutExpo",
+        delay: 800,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -125,15 +173,20 @@ export const HeroSection = ({
       <div className="pointer-events-none absolute inset-0 -z-0 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.25),_transparent_60%),_radial-gradient(circle_at_bottom,_hsl(var(--secondary)/0.24),_transparent_55%)] opacity-80" />
 
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 lg:flex-row lg:items-stretch">
-        <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center lg:items-start lg:text-left">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-black/20 px-4 py-1 text-xs font-medium text-primary shadow-glow-primary backdrop-blur">
-            <span className="h-2 w-2 rounded-full bg-primary shadow-glow-primary" aria-hidden="true" />
-            <span>Level 16 Unlocked.</span>
-          </div>
+        <div ref={cardRef} className="flex flex-1 flex-col items-center justify-center gap-6 text-center lg:items-start lg:text-left" style={{ opacity: 0 }}>
+          <FloatingElement amplitude={5} duration={4000}>
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-black/20 px-4 py-1 text-xs font-medium text-primary shadow-glow-primary backdrop-blur">
+              <span className="h-2 w-2 rounded-full bg-primary shadow-glow-primary animate-pulse" aria-hidden="true" />
+              <span>Level 16 Unlocked.</span>
+            </div>
+          </FloatingElement>
 
-          <div
-            className="noise-overlay relative max-w-2xl rounded-3xl border border-primary/40 bg-black/10 px-6 py-8 shadow-glow-primary backdrop-blur-lg sm:px-10 sm:py-10"
-          >
+          <PulseGlow color="#4ade80" className="w-full">
+            <div
+              ref={titleRef}
+              className="noise-overlay relative max-w-2xl rounded-3xl border border-primary/40 bg-black/10 px-6 py-8 shadow-glow-primary backdrop-blur-lg sm:px-10 sm:py-10"
+              style={{ opacity: 0 }}
+            >
             <div className="absolute inset-0 -z-10 rounded-3xl bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.18),_transparent_60%)]" />
 
             <button
@@ -170,21 +223,45 @@ export const HeroSection = ({
             </div>
 
             <div className="mt-7 flex flex-wrap items-center justify-center gap-4 sm:justify-start">
-              <Button
-                type="button"
-                variant="primaryHero"
-                size="lg"
-                onClick={() => {
-                  setHasUserInteracted(true);
-                  if (onShowCake) onShowCake();
-                }}
-                data-testid="celebrate-sequence-btn"
-              >
-                <span className="relative flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 rounded-full bg-accent shadow-glow-secondary" aria-hidden="true" />
-                  Celebrate sequence
-                </span>
-              </Button>
+              <RippleEffect>
+                <Button
+                  type="button"
+                  variant="primaryHero"
+                  size="lg"
+                  onClick={() => {
+                    setHasUserInteracted(true);
+                    
+                    // Trigger music
+                    if (settings.musicEnabled && audioRef.current) {
+                      audioRef.current.play()
+                        .then(() => setIsAudioPlaying(true))
+                        .catch(console.log);
+                    }
+                    
+                    // Trigger confetti and fireworks
+                    setShowConfetti(true);
+                    setTimeout(() => setShowFireworks(true), 500);
+                    setTimeout(() => {
+                      setShowConfetti(false);
+                      setShowFireworks(false);
+                    }, 4000);
+                    
+                    // Trigger celebrate animation
+                    celebrateSequence(onTriggerConfetti);
+                    
+                    // Show cake
+                    if (onShowCake) onShowCake();
+                  }}
+                  data-testid="celebrate-sequence-btn"
+                  className="animate-pulse-glow"
+                >
+                  <span className="relative flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 animate-spin-slow" />
+                    <span className="inline-block h-2 w-2 rounded-full bg-accent shadow-glow-secondary" aria-hidden="true" />
+                    Celebrate sequence
+                  </span>
+                </Button>
+              </RippleEffect>
 
               <div className="flex items-center gap-3">
                 <Button
@@ -228,7 +305,7 @@ export const HeroSection = ({
                 </div>
               )}
             </div>
-          </div>
+          </PulseGlow>
 
           <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-muted-foreground sm:justify-start">
             <span>
@@ -243,8 +320,8 @@ export const HeroSection = ({
           </div>
         </div>
 
-        <div className="mt-8 flex w-full max-w-md flex-1 flex-col gap-4 lg:mt-0">
-          <Card className="card-elevated w-full flex-1 border-primary/30 bg-black/20">
+        <div ref={hudRef} className="mt-8 flex w-full max-w-md flex-1 flex-col gap-4 lg:mt-0" style={{ opacity: 0 }}>
+          <Card className="card-elevated w-full flex-1 border-primary/30 bg-black/20 hover:shadow-glow-primary transition-shadow duration-500">
             <CardContent className="flex h-full flex-col gap-4 p-5 sm:p-6">
               <div className="flex items-center justify-between gap-3">
                 <div>
@@ -331,6 +408,10 @@ export const HeroSection = ({
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         Happy Birthday, Chirag! Level 16 unlocked.
       </div>
+
+      {/* Particle Effects */}
+      <ConfettiBurst trigger={showConfetti} />
+      <FireworksBurst trigger={showFireworks} />
     </section>
   );
 };
