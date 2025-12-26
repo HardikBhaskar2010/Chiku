@@ -67,12 +67,7 @@ export const ImageGallery = ({ settings }) => {
             Image gallery is toggled off in settings. Flip it back on when you drop the real photos.
           </div>
         )}
-        <p className="text-[11px] text-muted-foreground">
-          All image URLs can be edited in{" "}
-          <code className="rounded bg-muted/60 px-1 py-0.5 text-[11px]">
-            /src/components/birthday/ImageGallery.jsx
-          </code>
-        </p>
+        
       </CardContent>
     </Card>
   );

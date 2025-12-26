@@ -5,8 +5,9 @@ import { Toaster, toast } from "@/components/ui/sonner";
 import { createMatrixBackground } from "@/components/birthday/MatrixBackground";
 import { LayoutShell } from "@/components/birthday/LayoutShell";
 import { HomePage, GalleryPage, LogsPage, AboutPage } from "@/components/birthday/Pages";
-import { CakeComponent } from "@/components/birthday/CakeComponent";
+import { EnhancedCakeComponent } from "@/components/birthday/EnhancedCakeComponent";
 import { GiftBoxSystem } from "@/components/birthday/GiftBoxSystem";
+import { useDevicePerformance } from "@/hooks/useDevicePerformance";
 
 const STORAGE_KEY = "chirag-birthday-settings-v1";
 
@@ -96,6 +97,9 @@ function App() {
   const [activePage, setActivePage] = useState("home");
   const [showCake, setShowCake] = useState(false);
   const [showGifts, setShowGifts] = useState(false);
+  
+  // Device performance detection
+  const { performanceTier, settings: performanceSettings, isLoading: perfLoading } = useDevicePerformance();
 
   useEffect(() => {
     setSettings(loadSettings());
@@ -360,8 +364,8 @@ function App() {
         {pageElement}
       </LayoutShell>
 
-      {/* Cake Component */}
-      <CakeComponent
+      {/* Enhanced Cake Component */}
+      <EnhancedCakeComponent
         isVisible={showCake}
         onCakeTap={handleCakeTap}
         onAnimationComplete={handleCakeAnimationComplete}

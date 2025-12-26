@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Cake } from "lucide-react";
 
-// Realistic birthday cake with 16 candles
+// Enhanced realistic birthday cake with 16 candles
 export const CakeComponent = ({ onCakeTap, isVisible, onAnimationComplete }) => {
   const [isBlownOut, setIsBlownOut] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [showTapMe, setShowTapMe] = useState(false);
+  const cakeRef = useRef(null);
 
   useEffect(() => {
     if (isVisible) {

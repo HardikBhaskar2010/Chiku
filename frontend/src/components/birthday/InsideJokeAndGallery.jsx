@@ -14,13 +14,14 @@ export const placeholderImages = [
   },
   {
     id: 3,
-    label: "Legendary midnight deploy",
+    label: "Rare moment: awake",
   },
 ];
 
 export const InsideJokeAndGallery = ({ settings }) => {
   return (
     <section className="relative mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-16 pt-4 sm:px-6 lg:flex-row lg:px-10">
+      
       <div className="flex-1">
         <Card className="card-elevated border-primary/40 bg-black/30">
           <CardHeader className="pb-4">
@@ -29,21 +30,29 @@ export const InsideJokeAndGallery = ({ settings }) => {
               <p className="text-xs uppercase tracking-[0.18em]">Insider logs</p>
             </div>
             <CardTitle className="mt-1 text-lg font-semibold tracking-tight text-foreground">
-              More chaotic energy
+              Panda mode: always on
             </CardTitle>
           </CardHeader>
+
           <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>
-              Still cant believe that time you accidentally deployed to prod and it worked??
+              Chirag lives life on energy-saving mode. Minimal movement. Maximum chill.
             </p>
             <p>
-              Chirag, the only man who can break AND fix the app in the same minute 
+              Eats. Sleeps. Disappears. Reappears. No one knows the schedule.
             </p>
             <p>
-              We said no more midnight deploys and you still hit that button
+              If doing nothing was a sport, Chirag would still come first… effortlessly.
             </p>
+            <p>
+              Plans? Maybe. Execution? Tomorrow. Or next week. Or never.
+            </p>
+            <p>
+              The only guy who can look busy while doing absolutely nothing.
+            </p>
+
             <p className="pt-1 text-xs text-muted-foreground/80">
-              This card is hard-coded lore. Swap the copy in <code className="rounded bg-muted/60 px-1 py-0.5 text-[11px]">meta.json</code> later if you want new stories.
+              This lore is permanent. Panda updates are rare.
             </p>
           </CardContent>
         </Card>
@@ -52,6 +61,7 @@ export const InsideJokeAndGallery = ({ settings }) => {
       <div className="flex-1">
         <ImageGallery settings={settings} />
       </div>
+
     </section>
   );
 };

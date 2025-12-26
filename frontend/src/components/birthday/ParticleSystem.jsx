@@ -1,11 +1,21 @@
 import React, { useEffect, useCallback, useMemo } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
+import { useDevicePerformance } from "@/hooks/useDevicePerformance";
 
 let engineInitialized = false;
 
-export const ParticleSystem = ({ type = "confetti", isActive = true }) => {
+export const ParticleSystem = ({ type = "confetti", isActive = true, adaptiveCount }) => {
   const [init, setInit] = React.useState(false);
+  const { performanceTier, settings: perfSettings } = useDevicePerformance();
+  
+  // Adaptive particle count based on device performance
+  const particleMultiplier = useMemo(() => {
+    if (adaptiveCount && perfSettings) {
+      return perfSettings.particleCount / 80; // 80 is the default high-end count
+    }
+    return 1;
+  }, [adaptiveCount, perfSettings]);
 
   useEffect(() => {
     if (!engineInitialized) {
@@ -21,12 +31,16 @@ export const ParticleSystem = ({ type = "confetti", isActive = true }) => {
   }, []);
 
   const particlesLoaded = useCallback(async (container) => {
-    console.log("Particles container loaded", container);
-  }, []);
+    // Optimize rendering
+    if (container && perfSettings?.useRequestAnimationFrame) {
+      console.log("Particles loaded with GPU acceleration");
+    }
+  }, [perfSettings]);
 
   const confettiOptions = useMemo(
     () => ({
       fullScreen: { enable: true, zIndex: 100 },
+      fpsLimit: perfSettings?.targetFPS || 60,
       particles: {
         number: { value: 0 },
         color: {
@@ -93,25 +107,26 @@ export const ParticleSystem = ({ type = "confetti", isActive = true }) => {
         {
           direction: "top-right",
           position: { x: 0, y: 100 },
-          rate: { delay: 0.1, quantity: 3 },
+          rate: { delay: 0.1, quantity: Math.ceil(3 * particleMultiplier) },
           life: { duration: 0.1, count: 1 },
         },
         {
           direction: "top-left",
           position: { x: 100, y: 100 },
-          rate: { delay: 0.1, quantity: 3 },
+          rate: { delay: 0.1, quantity: Math.ceil(3 * particleMultiplier) },
           life: { duration: 0.1, count: 1 },
         },
       ],
     }),
-    []
+    [particleMultiplier, perfSettings]
   );
 
   const sparklesOptions = useMemo(
     () => ({
       fullScreen: { enable: false },
+      fpsLimit: perfSettings?.targetFPS || 60,
       particles: {
-        number: { value: 50, density: { enable: true, area: 800 } },
+        number: { value: Math.ceil(50 * particleMultiplier), density: { enable: true, area: 800 } },
         color: { value: ["#4ade80", "#38bdf8", "#facc15", "#ffffff"] },
         shape: { type: "star" },
         opacity: {
@@ -156,12 +171,13 @@ export const ParticleSystem = ({ type = "confetti", isActive = true }) => {
         },
       },
     }),
-    []
+    [particleMultiplier, perfSettings]
   );
 
   const fireworksOptions = useMemo(
     () => ({
       fullScreen: { enable: true, zIndex: 100 },
+      fpsLimit: perfSettings?.targetFPS || 60,
       particles: {
         number: { value: 0 },
         color: {
@@ -198,12 +214,12 @@ export const ParticleSystem = ({ type = "confetti", isActive = true }) => {
       emitters: {
         direction: "top",
         life: { count: 0, duration: 0.1, delay: 0.1 },
-        rate: { delay: 0.15, quantity: 1 },
+        rate: { delay: 0.15, quantity: Math.ceil(1 * particleMultiplier) },
         size: { width: 100, height: 0 },
         position: { y: 100, x: 50 },
       },
     }),
-    []
+    [particleMultiplier, perfSettings]
   );
 
   const options = type === "confetti" ? confettiOptions : type === "fireworks" ? fireworksOptions : sparklesOptions;
